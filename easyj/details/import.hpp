@@ -4,6 +4,7 @@
 // ... Standard header files
 //
 #include <string>
+#include <type_traits>
 #include <utility>
 
 //
@@ -16,12 +17,14 @@
 namespace easyj::details {
 
    using std::index_sequence;
+   using std::is_aggregate_v;
    using std::make_index_sequence;
    using std::string;
 
    using nlohmann::json;
 
    using pfr::get;
+   using pfr::tuple_size_v;
 
    using introspection::bare_type_name;
    using introspection::member_count;

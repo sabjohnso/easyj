@@ -12,3 +12,4 @@ macro(easyj_add_test test_name exe_name)
 endmacro()
 
 easyj_add_test(introspective introspective_test introspective_test.cpp)
+easyj_add_test(aggregate aggregate_test aggregate_test.cpp)
