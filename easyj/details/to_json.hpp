@@ -3,6 +3,7 @@
 //
 // ... easyj header files
 //
+#include <easyj/details/concepts.hpp>
 #include <easyj/details/import.hpp>
 
 namespace easyj::details {
@@ -24,10 +25,7 @@ namespace easyj::details {
       (make_index_sequence<member_count<T>>());
    }
 
-   template<typename T>
-   concept Aggregate = is_aggregate_v<T>;
-
-   template<typename T>
+   template<Aggregate T>
    void
    to_json(json& j, const T& arg) {
       string type_name(bare_type_name<T>);
