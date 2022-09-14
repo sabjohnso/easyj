@@ -40,7 +40,6 @@ namespace easyj::testing {
    }
 
    TEST(introspective, nonintrospective_aggregate_to_json_nested) {
-
       json expected = {
         {"Triangle",
          {{{"Point", {0.0, 0.0}}},
