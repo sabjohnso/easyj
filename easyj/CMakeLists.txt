@@ -8,8 +8,11 @@ target_include_directories(easyj_header
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
   $<INSTALL_INTERFACE:${easyj_INSTALL_INCLUDEDIR}>)
 
+target_link_libraries(easyj_header INTERFACE introspection::header nlohmann_json::nlohmann_json
+  pfr::header)
+
 add_library(easyj::header ALIAS easyj_header)
-  
+
 install(TARGETS easyj_header
   EXPORT easyj_EXPORTS
   RUNTIME DESTINATION ${easyj_INSTALL_BINDIR}
