@@ -10,3 +10,5 @@ macro(easyj_add_test test_name exe_name)
     CXX_STANDARD ${easyj_CXX_STANDARD})
   add_test(${test_name} ${exe_name})
 endmacro()
+
+easyj_add_test(introspective introspective_test introspective_test.cpp)
