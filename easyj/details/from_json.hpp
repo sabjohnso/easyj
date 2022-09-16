@@ -22,7 +22,7 @@ namespace easyj::details {
          (
            [ & ] {
               const string name{member_name<T, Index>};
-              assert(field.count(name));
+              assert(fields.count(name));
               get<Index>(arg) = fields[ name ];
            }(),
            ...);
