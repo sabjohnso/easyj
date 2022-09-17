@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.12)
 
 project(easyj VERSION 0.1.0 LANGUAGES C CXX)
 
-option(easyj_BUILD_TESTING "Build the easyj tests" ON)
+if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  option(easyj_BUILD_TESTING "Build the easyj tests" ON)
+endif()
+
 set(easyj_CXX_STANDARD 20 CACHE STRING "C++ standard for easyj")
 
 include(GNUInstallDirs)
