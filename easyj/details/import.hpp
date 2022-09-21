@@ -3,6 +3,7 @@
 //
 // ... Standard header files
 //
+#include <concepts>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -16,10 +17,13 @@
 
 namespace easyj::details {
 
+   using std::floating_point;
    using std::index_sequence;
+   using std::integral;
    using std::is_aggregate_v;
    using std::make_index_sequence;
    using std::string;
+   using std::type_identity;
 
    using nlohmann::json;
 

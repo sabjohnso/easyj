@@ -13,3 +13,4 @@ endmacro()
 
 easyj_add_test(introspective introspective_test introspective_test.cpp)
 easyj_add_test(aggregate aggregate_test aggregate_test.cpp)
+easyj_add_test(schema schema_test schema_test.cpp)
