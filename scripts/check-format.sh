@@ -11,30 +11,26 @@ function main(){
     format_files $testdir
 }
 
-function format_file(){
-    local inpfile=$1; shift
-    local tmpfile=$(mktemp)
-    clang-format --style=file $inpfile > $tmpfile
-    if [[ $(diff -q $inpfile $tmpfile) ]]
-    then
-        echo "reformatting $inpfile"
-        mv $tmpfile $inpfile
-    fi
-
-    rm -f $tmpfile
-}
-
 function format_files(){
     local inpdir=$1; shift
-    local source_files=$(find $inpdir -type f -name "*.hpp")
-    for source_file in $source_files
+    local files=$(find $inpdir -type f -regex ".*\\.hpp\\|.*\\.cpp")
+    for file in $files
     do
-        if [[ -f "$source_file" ]]
-        then
-            format_file $source_file
+        if [[ -f "$file" ]]; then
+            format_file $file
         fi
     done
 }
 
 
+function format_file(){
+    local file=$1; shift
+    astyle --project $file
+    if [[ -f $file.orig ]]; then
+        echo "$file reformatted"
+        rm $file.orig
+    fi
+}
+
+# execute the main function
 main
