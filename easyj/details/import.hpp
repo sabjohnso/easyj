@@ -17,6 +17,7 @@
 
 namespace easyj::details {
 
+   using std::declval;
    using std::floating_point;
    using std::index_sequence;
    using std::integral;

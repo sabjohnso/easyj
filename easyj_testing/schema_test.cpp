@@ -21,28 +21,61 @@
 namespace easyj::testing {
    using nlohmann::json;
 
+   template<typename T>
+   constexpr std::type_identity<std::remove_cvref_t<T>> type{};
+
    TEST(schema, boolean) {
-      json schema = json_schema(std::type_identity<bool>{});
-      ASSERT_EQ(schema.count("type"), 1);
-      ASSERT_EQ(schema[ "type" ], "boolean");
+      ASSERT_EQ(
+        json({
+          {"type", "boolean"}
+      }),
+        json_schema(type<bool>));
    }
 
    TEST(schema, integral) {
-      json schema = json_schema(std::type_identity<int>{});
-      ASSERT_EQ(schema.count("type"), 1);
-      ASSERT_EQ(schema[ "type" ], "integer");
+      ASSERT_EQ(
+        json({
+          {"type",    "integer"                      },
+          {"minimum", std::numeric_limits<int>::min()},
+          {"maximum", std::numeric_limits<int>::max()}
+      }),
+        json_schema(type<int>));
 
-      ASSERT_EQ(schema.count("minimum"), 1);
-      ASSERT_EQ(schema[ "minimum" ], std::numeric_limits<int>::min());
-
-      ASSERT_EQ(schema.count("maximum"), 1);
-      ASSERT_EQ(schema[ "maximum" ], std::numeric_limits<int>::max());
+      ASSERT_EQ(
+        json({
+          {"type",    "integer"                           },
+          {"minimum", std::numeric_limits<unsigned>::min()},
+          {"maximum", std::numeric_limits<unsigned>::max()}
+      }),
+        json_schema(type<unsigned>));
    }
 
    TEST(schema, floating_point) {
-      json schema = json_schema(std::type_identity<double>{});
-      ASSERT_EQ(schema.count("type"), 1);
-      ASSERT_EQ(schema[ "type" ], "number");
+      ASSERT_EQ(
+        json({
+          {"type", "number"}
+      }),
+        json_schema(type<double>));
+   }
+
+   TEST(schema, nonintrospective_aggregate) {
+      struct Point {
+         double x;
+         double y;
+      };
+      ASSERT_EQ(
+        json({
+          {"type",                 "object" },
+          {"properties",
+           {{"Point",
+             {{"type", "array"},
+              {"prefixItems",
+               {{{"type", "number"}}, {{"type", "number"}}}},
+              {"additionalItems", false}}}} },
+          {"required",             {"Point"}},
+          {"additionalProperties", false    }
+      }),
+        json_schema(type<Point>));
    }
 
 } // end of namespace easyj::testing
