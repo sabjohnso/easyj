@@ -69,6 +69,46 @@ namespace easyj::details {
         };
     }
 
+    template<Introspective T>
+    json
+    json_schema_function(type_identity<T>) {
+        return {
+            {"type", "object"},
+            {
+                "properties",
+                {  {
+                        "Point",
+                        {   {"type", "object"},
+                            {
+                                "properties",
+                                []<auto... Index>(index_sequence<Index...>) {
+                                    return json({{
+                                            string(member_name<T,Index>),
+                                            json_schema_function(type_identity<decltype(pfr::get<Index>(declval<T>()))>{})
+                                        } ...
+                                    });
+                                }
+                                (make_index_sequence<pfr::tuple_size_v<T>>())
+
+                            },
+                            {
+                                "required", []<auto ... Index>(index_sequence<Index ...>) {
+                                    return json({
+                                        string(member_name<T,Index>) ...
+                                    });
+                                }
+                                (make_index_sequence<pfr::tuple_size_v<T>>())
+                            },
+                            { "additionalProperties", false }
+                        }
+                    }
+                }
+            },
+            {"required", {"Point"}},
+            { "additionalProperties", false }
+        };
+    }
+
     struct json_schema_fn {
         template<typename T>
         constexpr auto

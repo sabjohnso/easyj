@@ -11,7 +11,11 @@
 //
 // ... External header files
 //
+#include <introspection/introspection.hpp>
+#include <introspection/macros.hpp>
+
 #include <nlohmann/json.hpp>
+
 
 //
 // ... easyj header files
@@ -84,6 +88,39 @@ namespace easyj::testing {
             {"additionalProperties", false    }
         }),
         json_schema(type<Point>));
+    }
+
+    struct Point {
+        double x{};
+        double y{};
+        INTROSPECTION_DATA(Point, x, y);
+    };
+    TEST(schema, introspective) {
+        ASSERT_EQ(json( {
+            {"type", "object"},
+            {
+                "properties",
+                {   {
+                        "Point",
+                        {   {"type", "object"},
+                            {
+                                "properties",
+                                {   {"x", {{"type", "number"}}},
+                                    {"y", {{"type", "number"}}}
+                                }
+                            },
+                            {
+                                "required", {"x", "y"}
+                            },
+                            {"additionalProperties", false}
+                        }
+                    }
+                }
+            },
+            {"required", {"Point"}},
+            {"additionalProperties", false}}),
+        json_schema(type<Point>));
+
     }
 
 } // end of namespace easyj::testing
